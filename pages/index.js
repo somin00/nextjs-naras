@@ -1,40 +1,21 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { fetchCountries } from "@/api";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function Home() {
-  const code = "KOR";
-
-  const router = useRouter();
-
-  const clickButton = () => {
-    router.push("/search");
-  };
-
+export default function Home({ countries }) {
   return (
-    <div>
-      Home Page
-      <div>
-        <button onClick={clickButton}>Search 페이지로 이동</button>
-      </div>
-      <div>
-        <Link href={"/search"}>Search 페이지로 이동</Link>
-      </div>
-      <div>
-        <Link
-          href={{
-            pathname: "/country/[code]", //컴포넌트 이름 작성
-            query: { code: code },
-          }}
-        >
-          {code} 페이지로 이동
-        </Link>
-      </div>
-    </div>
+    <ul>
+      {countries.map((country) => (
+        <li key={country.code}>{country.commonName}</li>
+      ))}
+    </ul>
   );
 }
+
+//SSR 서버측에서 컴포넌트로 전달할 데이터 설정
+export const getServerSideProps = async () => {
+  const countries = await fetchCountries();
+  return {
+    props: {
+      countries,
+    },
+  };
+};
