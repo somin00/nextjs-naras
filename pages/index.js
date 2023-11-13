@@ -10,8 +10,7 @@ export default function Home({ countries }) {
   );
 }
 
-//SSR 서버측에서 컴포넌트로 전달할 데이터 설정
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const countries = await fetchCountries();
   return {
     props: {
