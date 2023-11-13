@@ -2,7 +2,6 @@ import { fetchSearchResults } from "@/api";
 import SubLayout from "@/components/SubLayout";
 
 export default function Search({ searchResults }) {
-  console.log(searchResults);
   return (
     <ul>
       {searchResults.map((country) => (
