@@ -1,29 +1,33 @@
 import { fetchSearchResults } from "@/api";
+import CountryList from "@/components/CountryList";
+import Searchbar from "@/components/SearchBar";
 import SubLayout from "@/components/SubLayout";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-export default function Search({ searchResults }) {
+export default function Search() {
+  const router = useRouter();
+
+  const { q } = router.query;
+
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    const setData = async () => {
+      const countries = await fetchSearchResults(q);
+      setCountries(countries);
+    };
+
+    if (q) {
+      setData();
+    }
+  }, [q]);
+
   return (
-    <ul>
-      {searchResults.map((country) => (
-        <li key={country.code}>{country.commonName}</li>
-      ))}
-    </ul>
+    <>
+      <Searchbar q={q} />
+      <CountryList countries={countries} />
+    </>
   );
 }
 Search.Layout = SubLayout;
-
-export const getServerSideProps = async (context) => {
-  const { q } = context.query;
-
-  let searchResults = null;
-
-  if (q) {
-    searchResults = await fetchSearchResults(q);
-  }
-
-  return {
-    props: {
-      searchResults,
-    },
-  };
-};
