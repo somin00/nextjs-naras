@@ -1,12 +1,13 @@
 import { fetchCountries } from "@/api";
+import CountryList from "@/components/CountryList";
+import Searchbar from "@/components/SearchBar";
 
 export default function Home({ countries }) {
   return (
-    <ul>
-      {countries.map((country) => (
-        <li key={country.code}>{country.commonName}</li>
-      ))}
-    </ul>
+    <>
+      <Searchbar />
+      <CountryList countries={countries} />
+    </>
   );
 }
 
